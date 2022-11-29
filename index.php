@@ -41,6 +41,19 @@ $hotels = [
 ];
 
 
+
+if (isset($_GET['parking']) && !empty($_GET['parking'])) {
+    if ($_GET['parking'] == 'true') {
+        $hotels = array_filter($hotels, fn ($value) => $value['parking']);
+    } else {
+        $hotels = array_filter($hotels, fn ($value) => !$value['parking']);
+    };
+};
+if (isset($_GET['vote']) && !empty($_GET['vote'])) {
+    $hotels = array_filter($hotels, fn ($value) => $value['vote'] >= $_GET['vote']);
+};
+
+
 ?>
 
 <!DOCTYPE html>
@@ -65,9 +78,48 @@ $hotels = [
 
 <body>
     <div class="main">
-        
+        <div class="container">
+            <form class="d-flex mt-5" action="index.php">
+                <select name="parking" id="parking" class="form-select w-25 bg-black text-white">
+                    <option value="" selected>Parking</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <select name="vote" id="vote" class="form-select w-25 bg-black text-white mx-3">
+                    <option value="" selected>Vote</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <button type="submit" class="btn btn-dark">Search</button>
+            </form>
+            <table class="table table-dark mt-5">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Parking</th>
+                        <th scope="col">Vote</th>
+                        <th scope="col">Distance to Center</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($hotels as $hotel) { ?>
+                        <tr>
+                            <th scope="row"><?php echo $hotel['name'] ?></th>
+                            <td><?php echo $hotel['description'] ?></td>
+                            <td><?php echo $hotel['parking'] ?></td>
+                            <td><?php echo $hotel['vote'] ?></td>
+                            <td><?php echo $hotel['distance_to_center'] ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </body>
 
 </html>
-
